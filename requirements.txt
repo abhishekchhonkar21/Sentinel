@@ -1,0 +1,77 @@
+# Sentinel — runtime dependencies
+# Install: pip install -r requirements.txt
+# Python >= 3.11
+
+# ---------------------------------------------------------------------------
+# Web framework & API servers (FastAPI services: toy-system, agents, orchestrator)
+# ---------------------------------------------------------------------------
+fastapi>=0.115.0,<1.0.0
+uvicorn[standard]>=0.32.0,<1.0.0
+
+# ---------------------------------------------------------------------------
+# Schemas, config, and validation (Section 6 agent communication contracts)
+# ---------------------------------------------------------------------------
+pydantic>=2.10.0,<3.0.0
+pydantic-settings>=2.6.0,<3.0.0
+python-dotenv>=1.0.0,<2.0.0
+
+# ---------------------------------------------------------------------------
+# Datastore (MongoDB Atlas / local — deploys, events, reports, traces)
+# ---------------------------------------------------------------------------
+pymongo>=4.10.0,<5.0.0
+
+# ---------------------------------------------------------------------------
+# HTTP client (orchestrator → agents, load generator, eval harness, fault injection)
+# ---------------------------------------------------------------------------
+httpx>=0.28.0,<1.0.0
+
+# ---------------------------------------------------------------------------
+# Agent orchestration (LangGraph pipeline in orchestrator/)
+# ---------------------------------------------------------------------------
+langgraph>=0.2.60,<0.4.0
+langchain-core>=0.3.0,<0.4.0
+
+# ---------------------------------------------------------------------------
+# Observability (Prometheus metrics on toy-system + agent services)
+# ---------------------------------------------------------------------------
+prometheus-client>=0.21.0,<1.0.0
+
+# ---------------------------------------------------------------------------
+# Dependency graph (NetworkX v1 default; Neo4j optional — see bottom)
+# ---------------------------------------------------------------------------
+networkx>=3.4.0,<4.0.0
+
+# ---------------------------------------------------------------------------
+# Detector layer — classical ML + small HF models (Week 4–5)
+# z-score/EWMA, Isolation Forest, optional DistilBERT / log classifier
+# ---------------------------------------------------------------------------
+numpy>=2.1.0,<3.0.0
+scipy>=1.14.0,<2.0.0
+scikit-learn>=1.5.0,<2.0.0
+transformers>=4.46.0,<5.0.0
+# torch is required by transformers/sentence-transformers; CPU build keeps image size down.
+# For GPU: pip install torch --index-url https://download.pytorch.org/whl/cu124
+torch>=2.5.0,<3.0.0
+
+# ---------------------------------------------------------------------------
+# Past-incident similarity (Week 9 — embed incident report summaries)
+# ---------------------------------------------------------------------------
+sentence-transformers>=3.3.0,<4.0.0
+
+# ---------------------------------------------------------------------------
+# LLM clients (Narrator, Critic, naive baseline — Groq primary, Gemini fallback)
+# ---------------------------------------------------------------------------
+groq>=0.13.0,<1.0.0
+google-genai>=1.0.0,<2.0.0
+
+# ---------------------------------------------------------------------------
+# Fault catalogue & scripts (YAML seed data in fault-injection/catalogue/)
+# ---------------------------------------------------------------------------
+pyyaml>=6.0.0,<7.0.0
+
+# ---------------------------------------------------------------------------
+# Optional — uncomment when needed
+# ---------------------------------------------------------------------------
+# neo4j>=5.26.0,<6.0.0          # Neo4j backend instead of NetworkX (graph/neo4j_graph.py)
+# ollama>=0.4.0,<1.0.0          # Local offline LLM fallback during dev (Section 11)
+# locust>=2.32.0,<3.0.0         # Alternative to httpx for load-generator/ (Week 2)

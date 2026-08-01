@@ -1,0 +1,2 @@
+# Prometheus scrape config: toy-system services (4 microservices) + all agent services + orchestrator.
+# Scrape /metrics endpoints; configure retention and labels for per-service dashboards.

@@ -1,0 +1,2 @@
+# Grafana datasource provisioning: point at Prometheus from docker compose network.
+# Auto-provision on container startup so dashboards work without manual UI setup.

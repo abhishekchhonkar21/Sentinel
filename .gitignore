@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build / runtime
+dist/
+build/
+*.log
+
+# OS
+.DS_Store
+
+# Model caches / local ML artifacts
+models/
+.cache/
+*.pt
+*.bin
+
+# Grafana / Prometheus local data
+infra/prometheus/data/
+infra/grafana/data/

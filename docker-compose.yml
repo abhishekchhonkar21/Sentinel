@@ -1,0 +1,9 @@
+# Docker Compose: boots the full local stack for development and demo.
+# Services to define here:
+#   - mongodb (primary datastore; optionally seed fault_catalogue on first run)
+#   - api-gateway, orders-service, payments-service, inventory-service (toy system)
+#   - detector, investigator, hypothesis-ranker, narrator, critic (agent services)
+#   - orchestrator (LangGraph pipeline entry point)
+#   - prometheus + grafana (metrics and dashboards)
+#   - fault-injection (optional sidecar or CLI run via docker compose run)
+# Week 1 exit criterion: docker compose up → curl full order flow succeeds end-to-end.

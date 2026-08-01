@@ -1,0 +1,3 @@
+# Static seed data for fault_catalogue (15-25 scenarios) before MongoDB seed script runs.
+# Each entry: fault_id, description, injected_service, true_root_cause, expected_signal_type.
+# Reference examples from Section 5.1 of the plan (bad deploy, pool exhaustion, provider timeout, etc.).

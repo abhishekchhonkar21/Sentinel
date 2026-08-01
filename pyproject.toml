@@ -1,0 +1,16 @@
+# Root Python project config: dependencies, tooling, and package layout for all Sentinel services.
+# Pin FastAPI, LangGraph, Pydantic, pymongo, httpx, prometheus-client, sentence-transformers, etc.
+# Use optional dependency groups: [toy-system], [agents], [eval], [dev] for isolated installs if needed.
+
+[project]
+name = "sentinel"
+version = "0.1.0"
+description = "Autonomous incident-investigation agent for SRE copilot workflows"
+readme = "README.md"
+requires-python = ">=3.11"
+
+# Runtime deps are maintained in requirements.txt (dev: requirements-dev.txt).
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

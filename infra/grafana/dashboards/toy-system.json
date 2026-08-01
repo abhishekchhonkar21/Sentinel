@@ -1,0 +1,4 @@
+{
+  "_comment": "Grafana dashboard JSON: toy-system live latency and error-rate per service (Week 3). Add panels here as you build Week 11 agent observability (per-agent latency, token cost, accuracy).",
+  "dashboard": {}
+}

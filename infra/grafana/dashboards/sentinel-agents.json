@@ -1,0 +1,4 @@
+{
+  "_comment": "Grafana dashboard JSON: Sentinel agent pipeline observability (Week 11). Panels: per-agent latency, token cost per incident, running accuracy vs fault catalogue over time.",
+  "dashboard": {}
+}

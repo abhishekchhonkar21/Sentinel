@@ -1,0 +1,16 @@
+# Sentinel — development & test dependencies
+# Install: pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+# ---------------------------------------------------------------------------
+# Testing (tests/, eval harness smoke tests)
+# ---------------------------------------------------------------------------
+pytest>=8.3.0,<9.0.0
+pytest-asyncio>=0.24.0,<1.0.0
+pytest-cov>=6.0.0,<7.0.0
+
+# ---------------------------------------------------------------------------
+# Linting & formatting (optional but recommended before commits)
+# ---------------------------------------------------------------------------
+ruff>=0.8.0,<1.0.0
