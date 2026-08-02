@@ -1,9 +1,9 @@
 """Service bootstrap."""
 
 from toy_system.api_gateway.infrastructure.orders_client import OrdersClient
+from toy_system.api_gateway.infrastructure.settings import get_settings
 from toy_system.common.bootstrap import create_toy_service_app
 from toy_system.common.http_client import ServiceHttpClient
-from toy_system.api_gateway.infrastructure.settings import get_settings
 
 _http_client: ServiceHttpClient | None = None
 _orders_client: OrdersClient | None = None

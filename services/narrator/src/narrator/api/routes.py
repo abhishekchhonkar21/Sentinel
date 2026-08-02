@@ -1,5 +1,3 @@
-from pydantic import BaseModel
-
 from fastapi import APIRouter, Depends
 
 from narrator.api.dependencies import get_narrator_agent

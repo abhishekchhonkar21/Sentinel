@@ -7,7 +7,9 @@ from toy_system.common.schemas import InventoryItem
 from toy_system.inventory_service.adapters.persistence.mongo_inventory_repository import (
     MongoInventoryRepository,
 )
-from toy_system.inventory_service.api.exception_handlers import register_inventory_exception_handlers
+from toy_system.inventory_service.api.exception_handlers import (
+    register_inventory_exception_handlers,
+)
 from toy_system.inventory_service.infrastructure.settings import get_settings
 
 DEFAULT_CATALOG = [

@@ -1,5 +1,7 @@
 """HTTP routes — thin reverse proxy to downstream services."""
 
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from toy_system.api_gateway.api.dependencies import get_gateway_service
@@ -17,7 +19,7 @@ async def health() -> dict[str, str]:
 @router.post("/orders", response_model=CreateOrderResponse, status_code=201)
 async def create_order(
     request: CreateOrderRequest,
-    gateway: GatewayService = Depends(get_gateway_service),
+    gateway: Annotated[GatewayService, Depends(get_gateway_service)],
 ) -> CreateOrderResponse:
     """Public entry point — forwards to orders-service."""
     return await gateway.forward_create_order(request)

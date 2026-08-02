@@ -4,7 +4,6 @@ from langgraph.graph import END, StateGraph
 
 from orchestrator.domain.nodes import (
     critic_node,
-    detector_node,
     investigator_node,
     narrator_node,
     ranker_node,

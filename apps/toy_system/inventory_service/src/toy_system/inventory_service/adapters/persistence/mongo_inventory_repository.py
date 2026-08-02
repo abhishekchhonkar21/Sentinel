@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from pymongo import ReturnDocument
 from motor.motor_asyncio import AsyncIOMotorCollection, AsyncIOMotorDatabase
+from pymongo import ReturnDocument
 
 from toy_system.common.schemas import InventoryItem
 from toy_system.inventory_service.domain.exceptions import InsufficientStockError, ItemNotFoundError

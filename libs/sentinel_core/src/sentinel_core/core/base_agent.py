@@ -1,7 +1,7 @@
 """Base agent — Template Method pattern for all pipeline stages."""
 
-from abc import ABC, abstractmethod
 import time
+from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 from pydantic import BaseModel

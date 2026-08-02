@@ -1,8 +1,9 @@
 """Unit tests for sentinel_core Pydantic contracts."""
 
+from datetime import UTC, datetime
+
 from sentinel_core.domain.enums import SignalType
 from sentinel_core.schemas.contracts import AnomalyEvent
-from datetime import UTC, datetime
 
 
 def test_anomaly_event_schema():

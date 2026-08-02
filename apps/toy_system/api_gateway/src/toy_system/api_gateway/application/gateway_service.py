@@ -20,5 +20,9 @@ class GatewayService:
         self._settings = settings
 
     async def forward_create_order(self, request: CreateOrderRequest) -> CreateOrderResponse:
-        logger.info("forwarding_order customer_id=%s items=%s", request.customer_id, len(request.items))
+        logger.info(
+            "forwarding_order customer_id=%s items=%s",
+            request.customer_id,
+            len(request.items),
+        )
         return await self._orders.create_order(request)

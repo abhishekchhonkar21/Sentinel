@@ -25,8 +25,8 @@ def external_payment_app():
 
 @pytest.fixture
 def inventory_app():
-    from toy_system.inventory_service.infrastructure.container import create_app
     from toy_system.common.schemas import InventoryItem
+    from toy_system.inventory_service.infrastructure.container import create_app
 
     # In-memory fake repository for tests without MongoDB.
     class InMemoryInventoryRepository:
@@ -84,18 +84,16 @@ def test_inventory_reserve(inventory_app):
 
 
 def test_api_gateway_health():
+    from datetime import UTC, datetime
+
+    import toy_system.api_gateway.infrastructure.container as gw_container
     from toy_system.api_gateway.infrastructure.container import (
-        _orders_client,
-        _http_client,
         create_app,
         get_settings,
     )
     from toy_system.api_gateway.infrastructure.orders_client import OrdersClient
     from toy_system.common.http_client import ServiceHttpClient
     from toy_system.common.schemas import CreateOrderResponse, OrderStatus
-    from datetime import UTC, datetime
-
-    import toy_system.api_gateway.infrastructure.container as gw_container
 
     settings = get_settings()
     gw_container._http_client = ServiceHttpClient(settings)

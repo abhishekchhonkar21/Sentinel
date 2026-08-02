@@ -10,7 +10,6 @@ from toy_system.common.schemas import (
     ChargePaymentRequest,
     ChargePaymentResponse,
     ExternalChargeRequest,
-    PaymentStatus,
 )
 from toy_system.payments_service.infrastructure.external_payment_client import ExternalPaymentClient
 

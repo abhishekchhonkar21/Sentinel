@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from sentinel_core.schemas.contracts import CriticVerdict, EvidenceBundle, IncidentReport
+from sentinel_core.schemas.contracts import EvidenceBundle, IncidentReport
 
 
 class VerifyRequest(BaseModel):

@@ -7,7 +7,7 @@ import uuid
 
 from toy_system.common.config import ToyServiceSettings
 from toy_system.common.logging import configure_logging
-from toy_system.common.schemas import ExternalChargeRequest, ExternalChargeResponse, PaymentStatus
+from toy_system.common.schemas import ExternalChargeRequest, ExternalChargeResponse
 from toy_system.external_payment_mock.domain.charge_policy import ChargePolicy
 
 logger = configure_logging("external-payment-mock")

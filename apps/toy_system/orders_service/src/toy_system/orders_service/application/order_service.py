@@ -74,7 +74,12 @@ class OrderService:
             else OrderStatus.FAILED
         )
 
-        logger.info("order_completed order_id=%s status=%s total_cents=%s", order_id, status, total_cents)
+        logger.info(
+            "order_completed order_id=%s status=%s total_cents=%s",
+            order_id,
+            status,
+            total_cents,
+        )
         return CreateOrderResponse(
             order_id=order_id,
             status=status,
