@@ -28,8 +28,9 @@ class JsonLogFormatter(logging.Formatter):
             "trace_id": trace_id_var.get(),
             "message": record.getMessage(),
         }
-        if hasattr(record, "latency_ms"):
-            payload["latency_ms"] = record.latency_ms
+        latency_ms = getattr(record, "latency_ms", None)
+        if latency_ms is not None:
+            payload["latency_ms"] = latency_ms
         if record.exc_info:
             payload["exception"] = self.formatException(record.exc_info)
         return json.dumps(payload)

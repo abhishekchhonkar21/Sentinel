@@ -1,0 +1,37 @@
+{
+  "include": [
+    "apps",
+    "libs",
+    "services",
+    "eval",
+    "scripts",
+    "tests"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    ".venv",
+    "**/node_modules"
+  ],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.11",
+  "extraPaths": [
+    "libs/sentinel_core/src",
+    "apps/toy_system/common/src",
+    "apps/toy_system/api_gateway/src",
+    "apps/toy_system/orders_service/src",
+    "apps/toy_system/payments_service/src",
+    "apps/toy_system/inventory_service/src",
+    "apps/toy_system/external_payment_mock/src",
+    "services/detector/src",
+    "services/investigator/src",
+    "services/hypothesis_ranker/src",
+    "services/narrator/src",
+    "services/critic/src",
+    "services/orchestrator/src",
+    "services/api_gateway/src",
+    "apps/fault_injection/src"
+  ],
+  "reportMissingImports": true,
+  "reportAttributeAccessIssue": true
+}

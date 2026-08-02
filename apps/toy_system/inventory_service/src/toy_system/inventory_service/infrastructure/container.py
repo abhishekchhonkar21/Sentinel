@@ -29,10 +29,11 @@ def get_repository() -> MongoInventoryRepository:
 async def _startup() -> None:
     global _client, _repository
     settings = get_settings()
-    _client = AsyncIOMotorClient(settings.mongodb_uri)
-    db = _client.get_default_database()
+    client = AsyncIOMotorClient(settings.mongodb_uri)
+    db = client.get_default_database()
     if db is None:
         raise ValueError("MONGODB_URI must include a database name (e.g. .../sentinel)")
+    _client = client
     _repository = MongoInventoryRepository(db)
     await _repository.seed_if_empty(DEFAULT_CATALOG)
 
