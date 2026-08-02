@@ -19,6 +19,7 @@ python-dotenv>=1.0.0,<2.0.0
 # Datastore (MongoDB Atlas / local — deploys, events, reports, traces)
 # ---------------------------------------------------------------------------
 pymongo>=4.10.0,<5.0.0
+motor>=3.6.0,<4.0.0
 
 # ---------------------------------------------------------------------------
 # HTTP client (orchestrator → agents, load generator, eval harness, fault injection)

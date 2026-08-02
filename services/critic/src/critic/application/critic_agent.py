@@ -1,4 +1,4 @@
-from critic.api.routes import VerifyRequest
+from critic.domain.models import VerifyRequest
 from critic.domain.claim_verifier import ClaimVerifier
 from sentinel_core.core.base_agent import BaseAgent
 from sentinel_core.domain.enums import AgentName

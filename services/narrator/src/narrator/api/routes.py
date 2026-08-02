@@ -4,14 +4,10 @@ from fastapi import APIRouter, Depends
 
 from narrator.api.dependencies import get_narrator_agent
 from narrator.application.narrator_agent import NarratorAgent
-from sentinel_core.schemas.contracts import EvidenceBundle, IncidentReport, RankedHypotheses
+from narrator.domain.models import NarrateRequest
+from sentinel_core.schemas.contracts import IncidentReport
 
 router = APIRouter(prefix="/api/v1", tags=["narrator"])
-
-
-class NarrateRequest(BaseModel):
-    ranked: RankedHypotheses
-    evidence: EvidenceBundle
 
 
 @router.get("/health")

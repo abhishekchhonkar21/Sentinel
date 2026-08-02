@@ -1,0 +1,4 @@
+# Ground-truth fault definitions (15-25 scenarios) — seeded into MongoDB fault_catalogue.
+# Each entry: fault_id, description, injected_service, true_root_cause, expected_signal_type
+
+faults: []
