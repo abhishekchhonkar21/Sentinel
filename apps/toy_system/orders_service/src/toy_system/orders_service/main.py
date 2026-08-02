@@ -1,7 +1,5 @@
-from fastapi import APIRouter
-from toy_system.common.bootstrap import create_toy_service_app
+"""Orders service — orchestrates inventory reservation and payment."""
 
-router = APIRouter()
+from toy_system.orders_service.infrastructure.container import create_app
 
-def create_app():
-    return create_toy_service_app(title="Orders Service", router=router)
+app = create_app()

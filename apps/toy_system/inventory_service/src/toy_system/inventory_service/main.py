@@ -1,7 +1,5 @@
-from fastapi import APIRouter
-from toy_system.common.bootstrap import create_toy_service_app
+"""Inventory service — MongoDB-backed stock management."""
 
-router = APIRouter()
+from toy_system.inventory_service.infrastructure.container import create_app
 
-def create_app():
-    return create_toy_service_app(title="Inventory Service", router=router)
+app = create_app()

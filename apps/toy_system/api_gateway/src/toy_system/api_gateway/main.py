@@ -1,12 +1,5 @@
-# TODO: FastAPI routes for order placement flow through api-gateway
-# Use toy_system.common.bootstrap.create_toy_service_app for consistent setup
+"""API gateway — single entry point for the toy microservice mesh."""
 
-from fastapi import APIRouter
+from toy_system.api_gateway.infrastructure.container import create_app
 
-from toy_system.common.bootstrap import create_toy_service_app
-
-router = APIRouter()
-
-
-def create_app():
-    return create_toy_service_app(title="API Gateway", router=router)
+app = create_app()

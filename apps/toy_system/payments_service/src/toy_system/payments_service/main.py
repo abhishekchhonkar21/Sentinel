@@ -1,7 +1,5 @@
-from fastapi import APIRouter
-from toy_system.common.bootstrap import create_toy_service_app
+"""Payments service — processes charges via external payment provider."""
 
-router = APIRouter()
+from toy_system.payments_service.infrastructure.container import create_app
 
-def create_app():
-    return create_toy_service_app(title="Payments Service", router=router)
+app = create_app()

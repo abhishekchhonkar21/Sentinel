@@ -1,10 +1,134 @@
-# Docker Compose — full local stack
-# See docs/ARCHITECTURE.md for service topology and port assignments.
-#
-# Ports:
-#   8080  toy api-gateway
-#   8001  detector | 8002 investigator | 8003 ranker | 8004 narrator | 8005 critic
-#   8010  orchestrator | 8020 public api | 8030 fault-injection
-#   27017 mongodb | 9090 prometheus | 3000 grafana
+# Week 1 — Toy system stack
+# Uses MONGODB_URI from .env (Atlas or local). Local MongoDB is optional — see profile below.
 
-services: {}
+services:
+  # Optional local MongoDB — only needed if NOT using Atlas:
+  #   docker compose --profile local-mongo up
+  mongodb:
+    profiles: ["local-mongo"]
+    image: mongo:7
+    container_name: sentinel-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./infra/mongodb/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  external-payment-mock:
+    build:
+      context: .
+      dockerfile: apps/toy_system/Dockerfile
+      args:
+        SERVICE: external_payment_mock
+        PORT: 8084
+    container_name: sentinel-external-payment-mock
+    environment:
+      SERVICE_NAME: external_payment_mock
+      PORT: 8084
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: apps/toy_system/Dockerfile
+      args:
+        SERVICE: inventory_service
+        PORT: 8083
+    container_name: sentinel-inventory-service
+    env_file: .env
+    environment:
+      SERVICE_NAME: inventory_service
+      PORT: 8083
+      # MONGODB_URI loaded from .env (Atlas SRV or local)
+      INVENTORY_SERVICE_URL: http://inventory-service:8083
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  payments-service:
+    build:
+      context: .
+      dockerfile: apps/toy_system/Dockerfile
+      args:
+        SERVICE: payments_service
+        PORT: 8082
+    container_name: sentinel-payments-service
+    environment:
+      SERVICE_NAME: payments_service
+      PORT: 8082
+      EXTERNAL_PAYMENT_URL: http://external-payment-mock:8084
+      FAULT_NULL_DEREF: "false"
+    depends_on:
+      external-payment-mock:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  orders-service:
+    build:
+      context: .
+      dockerfile: apps/toy_system/Dockerfile
+      args:
+        SERVICE: orders_service
+        PORT: 8081
+    container_name: sentinel-orders-service
+    environment:
+      SERVICE_NAME: orders_service
+      PORT: 8081
+      INVENTORY_SERVICE_URL: http://inventory-service:8083
+      PAYMENTS_SERVICE_URL: http://payments-service:8082
+    depends_on:
+      inventory-service:
+        condition: service_healthy
+      payments-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: apps/toy_system/Dockerfile
+      args:
+        SERVICE: api_gateway
+        PORT: 8080
+    container_name: sentinel-api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SERVICE_NAME: api_gateway
+      PORT: 8080
+      ORDERS_SERVICE_URL: http://orders-service:8081
+    depends_on:
+      orders-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  mongo_data:

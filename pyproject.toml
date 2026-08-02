@@ -16,6 +16,12 @@ where = ["libs/sentinel_core/src"]
 testpaths = ["tests"]
 pythonpath = [
     "libs/sentinel_core/src",
+    "apps/toy_system/common/src",
+    "apps/toy_system/external_payment_mock/src",
+    "apps/toy_system/inventory_service/src",
+    "apps/toy_system/payments_service/src",
+    "apps/toy_system/orders_service/src",
+    "apps/toy_system/api_gateway/src",
     "services/detector/src",
     "services/investigator/src",
     "services/hypothesis_ranker/src",

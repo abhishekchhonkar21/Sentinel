@@ -22,17 +22,27 @@ Autonomous incident-investigation agent — an SRE copilot built on small models
 - **Template Method** — all agents extend `BaseAgent` for tracing, validation, and error handling
 - **Strategy + Factory** — swappable detection, scoring, LLM, and graph backends
 
-## Quick start
+## Quick start (local — no Docker)
 
 ```bash
 cp .env.example .env
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 pip install -e libs/sentinel_core
+
+# Requires MongoDB on localhost:27017 (or set MONGODB_URI in .env)
+python scripts/run_toy_system.py
+```
+
+See `apps/toy_system/README.md` for the full order-flow curl example.
+
+## Quick start (Docker — optional)
+
+```bash
 docker compose up
 ```
 
-## Run a single service locally
+## Run a single agent service locally
 
 ```bash
 export PYTHONPATH=libs/sentinel_core/src:services/detector/src

@@ -1,7 +1,5 @@
-from fastapi import APIRouter
-from toy_system.common.bootstrap import create_toy_service_app
+"""External payment provider mock."""
 
-router = APIRouter()
+from toy_system.external_payment_mock.infrastructure.container import create_app
 
-def create_app():
-    return create_toy_service_app(title="External Payment Mock", router=router)
+app = create_app()
