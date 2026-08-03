@@ -2,22 +2,51 @@
 
 Autonomous incident-investigation agent — an SRE copilot built on small models, not big reasoning.
 
-## What this repo contains
+## Repository layout
 
-- **toy-system/** — 4 FastAPI microservices + load generator (the system under test)
-- **agents/** — Detector, Investigator, Hypothesis-Ranker, Narrator, Critic (one FastAPI service each)
-- **orchestrator/** — LangGraph pipeline wiring agent services end-to-end
-- **shared/** — Pydantic schemas and MongoDB helpers (agent communication contracts)
-- **fault-injection/** — CLI/API to inject cataloged faults for eval ground truth
-- **eval/** — Baseline comparison and full fault-catalogue eval harness (resume numbers live here)
-- **scripts/** — One-off utilities (seed fault catalogue, simulate deploys)
-- **infra/** — Prometheus and Grafana config for toy system + agent observability
+| Path | Purpose |
+|------|---------|
+| `libs/sentinel_core/` | Shared library: domain models, ports, adapters, `BaseAgent`, app factory |
+| `services/` | Deployable agent microservices (detector, investigator, ranker, narrator, critic, orchestrator, api_gateway) |
+| `apps/toy_system/` | System under test (4 FastAPI microservices + load generator) |
+| `apps/fault_injection/` | Fault injection API + strategy registry |
+| `eval/` | Pipeline vs baseline comparison harness |
+| `scripts/` | MongoDB seeding, indexes, embeddings |
+| `infra/` | Prometheus + Grafana |
+| `docs/ARCHITECTURE.md` | Design patterns, layer rules, data flow |
 
-## Quick start (once implemented)
+## Architecture principles
+
+- **Hexagonal architecture** — business logic depends on ports (`sentinel_core/ports/`), not MongoDB or Groq directly
+- **Layered services** — each microservice has `api/` → `application/` → `domain/` → `infrastructure/`
+- **Template Method** — all agents extend `BaseAgent` for tracing, validation, and error handling
+- **Strategy + Factory** — swappable detection, scoring, LLM, and graph backends
+
+## Quick start (local — no Docker)
 
 ```bash
 cp .env.example .env
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
+pip install -e libs/sentinel_core
+
+# Requires MongoDB on localhost:27017 (or set MONGODB_URI in .env)
+python scripts/run_toy_system.py
+```
+
+See `apps/toy_system/README.md` for the full order-flow curl example.
+
+## Quick start (Docker — optional)
+
+```bash
 docker compose up
 ```
 
-See `Sentinel_Project_Plan.md` (or `PLAN.md`) for the full build roadmap.
+## Run a single agent service locally
+
+```bash
+export PYTHONPATH=libs/sentinel_core/src:services/detector/src
+uvicorn detector.main:app --reload --port 8001
+```
+
+See `Sentinel_Project_Plan.md` for the 12-week build roadmap and `docs/ARCHITECTURE.md` for design details.

@@ -1,7 +1,7 @@
 """FastAPI application factory — consistent service bootstrap across all agents."""
 
-from collections.abc import AsyncIterator, Callable
-from contextlib import asynccontextmanager
+from collections.abc import Callable
+from contextlib import AbstractAsyncContextManager
 
 from fastapi import APIRouter, FastAPI
 
@@ -14,7 +14,7 @@ def create_service_app(
     title: str,
     version: str,
     router: APIRouter,
-    lifespan: Callable[[FastAPI], AsyncIterator[None]] | None = None,
+    lifespan: Callable[[FastAPI], AbstractAsyncContextManager[None]] | None = None,
 ) -> FastAPI:
     """Factory Method — every microservice calls this instead of raw FastAPI()."""
     app = FastAPI(title=title, version=version, lifespan=lifespan)

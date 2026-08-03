@@ -1,2 +1,3 @@
-# Eval harness helpers: inject fault → wait for pipeline → fetch incident report → score.
-# Shared by run_comparison.py and run_full_catalogue.py; handles timing and result persistence.
+"""Eval harness: inject fault → wait for pipeline → fetch report → score."""
+
+# TODO: shared loop for comparison and full catalogue scripts

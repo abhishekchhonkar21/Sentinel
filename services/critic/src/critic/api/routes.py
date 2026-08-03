@@ -1,17 +1,11 @@
-from pydantic import BaseModel
-
 from fastapi import APIRouter, Depends
 
 from critic.api.dependencies import get_critic_agent
 from critic.application.critic_agent import CriticAgent
-from sentinel_core.schemas.contracts import CriticVerdict, EvidenceBundle, IncidentReport
+from critic.domain.models import VerifyRequest
+from sentinel_core.schemas.contracts import CriticVerdict
 
 router = APIRouter(prefix="/api/v1", tags=["critic"])
-
-
-class VerifyRequest(BaseModel):
-    report: IncidentReport
-    evidence: EvidenceBundle
 
 
 @router.get("/health")

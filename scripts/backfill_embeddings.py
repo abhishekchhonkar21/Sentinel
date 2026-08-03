@@ -1,2 +1,3 @@
-# Embed incident report summaries and upsert vectors for Atlas Vector Search (Week 9).
-# Uses free sentence-transformer from Hugging Face; backfill incident_reports.embedding field.
+"""Backfill incident_reports.embedding for Atlas Vector Search."""
+
+# TODO: python scripts/backfill_embeddings.py

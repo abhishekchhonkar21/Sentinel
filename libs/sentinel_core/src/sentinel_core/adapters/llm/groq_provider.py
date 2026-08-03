@@ -1,8 +1,6 @@
 """Groq LLM adapter — implements LLMProvider port."""
 
-from pydantic import BaseModel
 
-from sentinel_core.core.exceptions import LLMOutputError, ExternalServiceError
 from sentinel_core.ports.llm_provider import LLMProvider, TSchema
 
 

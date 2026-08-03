@@ -1,6 +1,6 @@
 """NarratorAgent — extends BaseAgent; thin LLM layer for incident reports."""
 
-from narrator.api.routes import NarrateRequest
+from narrator.domain.models import NarrateRequest
 from narrator.domain.report_generator import ReportGenerator
 from sentinel_core.core.base_agent import BaseAgent
 from sentinel_core.domain.enums import AgentName
