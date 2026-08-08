@@ -10,25 +10,25 @@ readme = "README.md"
 requires-python = ">=3.11"
 
 [tool.setuptools.packages.find]
-where = ["libs/sentinel_core/src"]
+where = ["backend/libs/sentinel_core/src"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["backend/tests"]
 pythonpath = [
-    "libs/sentinel_core/src",
-    "apps/toy_system/common/src",
-    "apps/toy_system/external_payment_mock/src",
-    "apps/toy_system/inventory_service/src",
-    "apps/toy_system/payments_service/src",
-    "apps/toy_system/orders_service/src",
-    "apps/toy_system/api_gateway/src",
-    "services/detector/src",
-    "services/investigator/src",
-    "services/hypothesis_ranker/src",
-    "services/narrator/src",
-    "services/critic/src",
-    "services/orchestrator/src",
-    "apps/fault_injection/src",
+    "backend/libs/sentinel_core/src",
+    "backend/apps/toy_system/common/src",
+    "backend/apps/toy_system/external_payment_mock/src",
+    "backend/apps/toy_system/inventory_service/src",
+    "backend/apps/toy_system/payments_service/src",
+    "backend/apps/toy_system/orders_service/src",
+    "backend/apps/toy_system/api_gateway/src",
+    "backend/services/detector/src",
+    "backend/services/investigator/src",
+    "backend/services/hypothesis_ranker/src",
+    "backend/services/narrator/src",
+    "backend/services/critic/src",
+    "backend/services/orchestrator/src",
+    "backend/apps/fault_injection/src",
 ]
 
 [tool.ruff]
