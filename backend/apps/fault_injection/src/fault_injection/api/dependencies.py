@@ -1,9 +1,3 @@
-from functools import lru_cache
+from fault_injection.infrastructure.container import get_injection_service
 
-from fault_injection.application.injection_service import FaultInjectionService
-from fault_injection.domain.injectors.registry import InjectorRegistry
-
-
-@lru_cache
-def get_injection_service() -> FaultInjectionService:
-    return FaultInjectionService(registry=InjectorRegistry())
+__all__ = ["get_injection_service"]

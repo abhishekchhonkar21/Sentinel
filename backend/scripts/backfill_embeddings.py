@@ -1,3 +1,3 @@
 """Backfill incident_reports.embedding for Atlas Vector Search."""
 
-# TODO: python scripts/backfill_embeddings.py
+# TODO: python backend/scripts/backfill_embeddings.py

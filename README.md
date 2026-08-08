@@ -6,12 +6,13 @@ Autonomous incident-investigation agent — an SRE copilot built on small models
 
 | Path | Purpose |
 |------|---------|
-| `libs/sentinel_core/` | Shared library: domain models, ports, adapters, `BaseAgent`, app factory |
-| `services/` | Deployable agent microservices (detector, investigator, ranker, narrator, critic, orchestrator, api_gateway) |
-| `apps/toy_system/` | System under test (4 FastAPI microservices + load generator) |
-| `apps/fault_injection/` | Fault injection API + strategy registry |
-| `eval/` | Pipeline vs baseline comparison harness |
-| `scripts/` | MongoDB seeding, indexes, embeddings |
+| `backend/libs/sentinel_core/` | Shared library: domain models, ports, adapters, `BaseAgent`, app factory |
+| `backend/services/` | Deployable agent microservices (detector, investigator, ranker, narrator, critic, orchestrator, api_gateway) |
+| `backend/apps/toy_system/` | System under test (4 FastAPI microservices + load generator) |
+| `backend/apps/fault_injection/` | Fault injection API + strategy registry |
+| `backend/eval/` | Pipeline vs baseline comparison harness |
+| `backend/scripts/` | MongoDB seeding, indexes, embeddings |
+| `frontend/` | React dashboard for fault injection (Week 2) |
 | `infra/` | Prometheus + Grafana |
 | `docs/ARCHITECTURE.md` | Design patterns, layer rules, data flow |
 
@@ -27,14 +28,14 @@ Autonomous incident-investigation agent — an SRE copilot built on small models
 ```bash
 cp .env.example .env
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements-dev.txt
-pip install -e libs/sentinel_core
+pip install -r backend/requirements-dev.txt
+pip install -e backend/libs/sentinel_core
 
 # Requires MongoDB on localhost:27017 (or set MONGODB_URI in .env)
-python scripts/run_toy_system.py
+python backend/scripts/run_toy_system.py
 ```
 
-See `apps/toy_system/README.md` for the full order-flow curl example.
+See `backend/apps/toy_system/README.md` for the full order-flow curl example.
 
 ## Quick start (Docker — optional)
 
@@ -42,10 +43,22 @@ See `apps/toy_system/README.md` for the full order-flow curl example.
 docker compose up
 ```
 
+## Frontend (fault injection dashboard)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) (proxies `/api` to fault-injection on `:8090`).
+
+See `frontend/README.md` for prerequisites.
+
 ## Run a single agent service locally
 
 ```bash
-export PYTHONPATH=libs/sentinel_core/src:services/detector/src
+export PYTHONPATH=backend/libs/sentinel_core/src:backend/services/detector/src
 uvicorn detector.main:app --reload --port 8001
 ```
 

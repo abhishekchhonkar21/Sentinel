@@ -5,6 +5,7 @@ from __future__ import annotations
 import uuid
 
 from toy_system.common.config import ToyServiceSettings
+from toy_system.common.fault_state import fault_state_store
 from toy_system.common.logging import configure_logging
 from toy_system.common.schemas import (
     ChargePaymentRequest,
@@ -35,8 +36,9 @@ class PaymentService:
         )
 
         # Fault-prone path: simulates a bad deploy that crashes before charging.
-        # When enabled, produces 500s that cascade to orders-service (Week 2 harness).
-        if self._settings.fault_null_deref:
+        # Enabled via env (boot) or runtime admin API (Week 2 fault injection).
+        fault_state = fault_state_store.get()
+        if self._settings.fault_null_deref or fault_state.null_deref:
             logger.error("fault_null_deref_triggered order_id=%s", request.order_id)
             raise RuntimeError("Simulated null-deref fault from bad deploy")
 

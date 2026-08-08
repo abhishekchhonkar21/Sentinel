@@ -22,7 +22,7 @@ services:
   external-payment-mock:
     build:
       context: .
-      dockerfile: apps/toy_system/Dockerfile
+      dockerfile: backend/apps/toy_system/Dockerfile
       args:
         SERVICE: external_payment_mock
         PORT: 8084
@@ -40,7 +40,7 @@ services:
   inventory-service:
     build:
       context: .
-      dockerfile: apps/toy_system/Dockerfile
+      dockerfile: backend/apps/toy_system/Dockerfile
       args:
         SERVICE: inventory_service
         PORT: 8083
@@ -61,7 +61,7 @@ services:
   payments-service:
     build:
       context: .
-      dockerfile: apps/toy_system/Dockerfile
+      dockerfile: backend/apps/toy_system/Dockerfile
       args:
         SERVICE: payments_service
         PORT: 8082
@@ -84,7 +84,7 @@ services:
   orders-service:
     build:
       context: .
-      dockerfile: apps/toy_system/Dockerfile
+      dockerfile: backend/apps/toy_system/Dockerfile
       args:
         SERVICE: orders_service
         PORT: 8081
@@ -109,7 +109,7 @@ services:
   api-gateway:
     build:
       context: .
-      dockerfile: apps/toy_system/Dockerfile
+      dockerfile: backend/apps/toy_system/Dockerfile
       args:
         SERVICE: api_gateway
         PORT: 8080
@@ -125,6 +125,31 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  fault-injection:
+    build:
+      context: .
+      dockerfile: backend/apps/fault_injection/Dockerfile
+    container_name: sentinel-fault-injection
+    ports:
+      - "8090:8090"
+    env_file: .env
+    environment:
+      PORT: 8090
+      API_GATEWAY_URL: http://api-gateway:8080
+      ORDERS_SERVICE_URL: http://orders-service:8081
+      PAYMENTS_SERVICE_URL: http://payments-service:8082
+      INVENTORY_SERVICE_URL: http://inventory-service:8083
+      EXTERNAL_PAYMENT_URL: http://external-payment-mock:8084
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/api/v1/health"]
       interval: 10s
       timeout: 5s
       retries: 5

@@ -1,5 +1,5 @@
 # Shared Dockerfile for all toy-system microservices.
-# Build with: docker build -f apps/toy_system/Dockerfile --build-arg SERVICE=api_gateway --build-arg PORT=8080 .
+# Build with: docker build -f backend/apps/toy_system/Dockerfile --build-arg SERVICE=api_gateway --build-arg PORT=8080 .
 
 FROM python:3.11-slim
 
@@ -13,14 +13,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Python dependencies (cached layer) — toy-system only; keeps image build fast
-COPY requirements-toy-system.txt requirements.txt
-COPY libs/sentinel_core /app/libs/sentinel_core
+COPY backend/requirements-toy-system.txt requirements.txt
+COPY backend/libs/sentinel_core /app/libs/sentinel_core
 RUN pip install --no-cache-dir -r requirements.txt \
     && pip install --no-cache-dir -e /app/libs/sentinel_core
 
 # Shared toy-system library + target service source
-COPY apps/toy_system/common /app/apps/toy_system/common
-COPY apps/toy_system/${SERVICE} /app/apps/toy_system/${SERVICE}
+COPY backend/apps/toy_system/common /app/apps/toy_system/common
+COPY backend/apps/toy_system/${SERVICE} /app/apps/toy_system/${SERVICE}
 
 # Namespace package: all toy_system/* src dirs on PYTHONPATH merge into one tree.
 ENV PYTHONPATH=/app/libs/sentinel_core/src:/app/apps/toy_system/common/src:/app/apps/toy_system/${SERVICE}/src

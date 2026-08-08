@@ -2,11 +2,11 @@
 """Start all toy-system microservices locally (no Docker required).
 
 Usage:
-    python scripts/run_toy_system.py          # start all services
-    python scripts/run_toy_system.py --check  # health-check only (services already running)
+    python backend/scripts/run_toy_system.py          # start all services
+    python backend/scripts/run_toy_system.py --check  # health-check only (services already running)
 
 Prerequisites:
-    - Python 3.11+ with dependencies installed (pip install -r requirements-dev.txt)
+    - Python 3.11+ with dependencies installed (pip install -r backend/requirements-dev.txt)
     - MongoDB running locally on mongodb://localhost:27017 (brew services start mongodb-community)
 """
 

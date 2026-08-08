@@ -2,7 +2,9 @@
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
+from toy_system.common.admin_routes import register_fault_state_callback
 from toy_system.common.bootstrap import create_toy_service_app
+from toy_system.common.pool_stress import PoolStressManager
 from toy_system.common.schemas import InventoryItem
 from toy_system.inventory_service.adapters.persistence.mongo_inventory_repository import (
     MongoInventoryRepository,
@@ -20,6 +22,7 @@ DEFAULT_CATALOG = [
 
 _client: AsyncIOMotorClient | None = None
 _repository: MongoInventoryRepository | None = None
+_pool_stress: PoolStressManager | None = None
 
 
 def get_repository() -> MongoInventoryRepository:
@@ -29,7 +32,7 @@ def get_repository() -> MongoInventoryRepository:
 
 
 async def _startup() -> None:
-    global _client, _repository
+    global _client, _repository, _pool_stress
     settings = get_settings()
     client = AsyncIOMotorClient(settings.mongodb_uri)
     db = client.get_default_database()
@@ -38,12 +41,24 @@ async def _startup() -> None:
     _client = client
     _repository = MongoInventoryRepository(db)
     await _repository.seed_if_empty(DEFAULT_CATALOG)
+    _pool_stress = PoolStressManager(settings=settings)
+    await _pool_stress.sync()
+    register_fault_state_callback(sync_pool_stress)
 
 
 async def _shutdown() -> None:
-    global _client
+    global _client, _pool_stress
+    if _pool_stress:
+        await _pool_stress.shutdown()
+        _pool_stress = None
     if _client:
         _client.close()
+
+
+async def sync_pool_stress() -> None:
+    """Called after admin fault-state updates to align pool stress connections."""
+    if _pool_stress is not None:
+        await _pool_stress.sync()
 
 
 def create_app():

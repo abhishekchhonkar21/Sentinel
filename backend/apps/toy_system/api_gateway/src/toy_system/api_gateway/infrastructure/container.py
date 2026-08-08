@@ -4,6 +4,7 @@ from toy_system.api_gateway.infrastructure.orders_client import OrdersClient
 from toy_system.api_gateway.infrastructure.settings import get_settings
 from toy_system.common.bootstrap import create_toy_service_app
 from toy_system.common.http_client import ServiceHttpClient
+from toy_system.common.rate_limit import RateLimitMiddleware
 
 _http_client: ServiceHttpClient | None = None
 _orders_client: OrdersClient | None = None
@@ -33,10 +34,12 @@ async def _shutdown() -> None:
 def create_app():
     from toy_system.api_gateway.api.routes import router
 
-    return create_toy_service_app(
+    app = create_toy_service_app(
         title="API Gateway",
         router=router,
         settings=get_settings(),
         on_startup=_startup,
         on_shutdown=_shutdown,
     )
+    app.add_middleware(RateLimitMiddleware)
+    return app

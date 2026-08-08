@@ -1,3 +1,3 @@
 """Simulate deploy history into MongoDB deploys collection."""
 
-# TODO: python scripts/simulate_deploys.py
+# TODO: python backend/scripts/simulate_deploys.py

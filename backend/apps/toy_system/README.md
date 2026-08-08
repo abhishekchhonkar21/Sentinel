@@ -1,6 +1,7 @@
-# Toy System — Week 1
+# Toy System — Week 1–2
 
 Four FastAPI microservices + external payment mock, wired for a full order-placement flow.
+Week 2 adds a load generator and fault-injection harness.
 
 ## Service topology
 
@@ -16,10 +17,12 @@ api-gateway (:8080)
 
 ### 1. Prerequisites
 
+From the **repo root**:
+
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements-dev.txt
-pip install -e libs/sentinel_core
+pip install -r backend/requirements-dev.txt
+pip install -e backend/libs/sentinel_core
 ```
 
 MongoDB must be running locally (inventory-service needs it):
@@ -34,7 +37,7 @@ brew services start mongodb-community
 ### 2. Start all services
 
 ```bash
-python scripts/run_toy_system.py
+python backend/scripts/run_toy_system.py
 ```
 
 This starts all five services, waits for health checks, runs a smoke test, and keeps running until Ctrl+C.
@@ -66,9 +69,9 @@ Expected response:
 
 ```bash
 export PYTHONPATH=\
-libs/sentinel_core/src:\
-apps/toy_system/common/src:\
-apps/toy_system/inventory_service/src
+backend/libs/sentinel_core/src:\
+backend/apps/toy_system/common/src:\
+backend/apps/toy_system/inventory_service/src
 
 uvicorn toy_system.inventory_service.main:app --reload --port 8083
 ```
@@ -101,3 +104,42 @@ docker compose up
 ```
 
 See root `docker-compose.yml` — not required for local development.
+
+## Week 2 — Load generator & fault injection
+
+### Seed fault catalogue
+
+```bash
+python backend/scripts/seed_fault_catalogue.py
+```
+
+### Start fault injection service
+
+```bash
+export PYTHONPATH=backend/libs/sentinel_core/src:backend/apps/fault_injection/src
+uvicorn fault_injection.main:app --reload --port 8090
+```
+
+### Inject a fault
+
+```bash
+python backend/scripts/inject_fault.py --fault-id payments-null-deref
+python backend/scripts/inject_fault.py --fault-id payment-provider-timeout
+python backend/scripts/inject_fault.py --fault-id api-gateway-rate-limit
+python backend/scripts/inject_fault.py --fault-id inventory-db-latency
+python backend/scripts/inject_fault.py --fault-id payment-provider-reject
+```
+
+### Clear fault state on a service
+
+```bash
+curl -X POST http://localhost:8090/api/v1/clear-fault \
+  -H "Content-Type: application/json" \
+  -d '{"service":"payments-service"}'
+```
+
+### Run load generator
+
+```bash
+python backend/apps/toy_system/load_generator/generator.py --rps 3
+```

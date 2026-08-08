@@ -3,13 +3,15 @@
 ## Layout (monorepo)
 
 ```
-libs/sentinel_core/     # Shared library — domain, ports, adapters, infrastructure
-services/               # Deployable agent microservices (hexagonal / clean architecture)
-apps/                   # Toy system under test + fault injection
-eval/                   # Benchmark harness
-scripts/                # DB seeding and maintenance
-infra/                  # Prometheus, Grafana
-tests/                  # unit/ and integration/
+backend/
+├── libs/sentinel_core/     # Shared library — domain, ports, adapters, infrastructure
+├── services/               # Deployable agent microservices (hexagonal / clean architecture)
+├── apps/                   # Toy system under test + fault injection
+├── eval/                   # Benchmark harness
+├── scripts/                # DB seeding and maintenance
+└── tests/                  # unit/ and integration/
+frontend/                   # React dashboard (fault injection UI)
+infra/                      # Prometheus, Grafana
 ```
 
 ## Design patterns
@@ -27,7 +29,7 @@ tests/                  # unit/ and integration/
 
 ## Service internal layers
 
-Every service under `services/` follows the same structure:
+Every service under `backend/services/` follows the same structure:
 
 ```
 service/
@@ -42,7 +44,7 @@ service/
 └── Dockerfile
 ```
 
-**Dependency rule:** `api` → `application` → `domain` ← `infrastructure` implements ports from `libs/sentinel_core`.
+**Dependency rule:** `api` → `application` → `domain` ← `infrastructure` implements ports from `backend/libs/sentinel_core`.
 
 ## Data flow
 
@@ -51,4 +53,4 @@ AnomalyEvent → InvestigatorAgent → EvidenceBundle → HypothesisRankerAgent
     → RankedHypotheses → NarratorAgent → IncidentReport → CriticAgent → CriticVerdict
 ```
 
-Orchestrator (`services/orchestrator/`) drives this via LangGraph, calling each agent over HTTP.
+Orchestrator (`backend/services/orchestrator/`) drives this via LangGraph, calling each agent over HTTP.

@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import asyncio
 import uuid
 from datetime import UTC, datetime
 
 from toy_system.common.config import ToyServiceSettings
+from toy_system.common.fault_state import fault_state_store
 from toy_system.common.logging import configure_logging
 from toy_system.common.schemas import (
     ChargePaymentRequest,
@@ -45,6 +47,14 @@ class OrderService:
         self._pricing = OrderPricing()
 
     async def place_order(self, request: CreateOrderRequest) -> CreateOrderResponse:
+        fault_state = fault_state_store.get()
+        if fault_state.processing_delay_ms > 0:
+            logger.warning(
+                "simulating_processing_delay delay_ms=%s",
+                fault_state.processing_delay_ms,
+            )
+            await asyncio.sleep(fault_state.processing_delay_ms / 1000)
+
         order_id = f"ord_{uuid.uuid4().hex[:12]}"
         logger.info("placing_order order_id=%s customer_id=%s", order_id, request.customer_id)
 

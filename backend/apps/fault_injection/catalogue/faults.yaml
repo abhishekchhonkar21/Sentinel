@@ -1,4 +1,123 @@
-# Ground-truth fault definitions (15-25 scenarios) — seeded into MongoDB fault_catalogue.
+# Ground-truth fault definitions — seeded into MongoDB fault_catalogue.
 # Each entry: fault_id, description, injected_service, true_root_cause, expected_signal_type
 
-faults: []
+faults:
+  - fault_id: payments-null-deref
+    description: Bad deploy in payments-service introduces null-deref before charge
+    injected_service: payments-service
+    true_root_cause: Bad deploy to payments-service introduced null deref in charge handler
+    expected_signal_type: log_pattern
+
+  - fault_id: payment-provider-timeout
+    description: External payment provider starts timing out on every charge
+    injected_service: external-payment-mock
+    true_root_cause: External payment provider outage causing upstream timeouts
+    expected_signal_type: log_pattern
+
+  - fault_id: api-gateway-rate-limit
+    description: Misconfigured rate limit at api-gateway causes 429 spikes
+    injected_service: api-gateway
+    true_root_cause: Misconfigured rate limit at api-gateway
+    expected_signal_type: metric_spike
+
+  - fault_id: inventory-db-latency
+    description: MongoDB operations in inventory-service artificially slowed
+    injected_service: inventory-service
+    true_root_cause: MongoDB connection pool exhaustion in inventory-service
+    expected_signal_type: metric_spike
+
+  - fault_id: payment-provider-reject
+    description: External payment provider rejects all charges
+    injected_service: external-payment-mock
+    true_root_cause: External payment provider rejecting all transactions
+    expected_signal_type: log_pattern
+
+  - fault_id: inventory-pool-stress
+    description: Inventory-service holds extra MongoDB connections open
+    injected_service: inventory-service
+    true_root_cause: MongoDB connection pool exhaustion in inventory-service
+    expected_signal_type: metric_spike
+
+  - fault_id: orders-processing-delay
+    description: Orders-service adds artificial latency to every order
+    injected_service: orders-service
+    true_root_cause: Memory leak simulation causing gradual latency degradation in orders-service
+    expected_signal_type: metric_spike
+
+  - fault_id: payments-null-deref-cascade
+    description: Payments fault cascades 500s to orders-service and api-gateway
+    injected_service: payments-service
+    true_root_cause: Bad deploy to payments-service introduced null deref in charge handler
+    expected_signal_type: log_pattern
+
+  - fault_id: payment-provider-slow
+    description: Moderate provider latency without full timeout
+    injected_service: external-payment-mock
+    true_root_cause: External payment provider degraded performance
+    expected_signal_type: metric_spike
+
+  - fault_id: api-gateway-strict-rate-limit
+    description: Very aggressive rate limit (1 req/sec) at gateway
+    injected_service: api-gateway
+    true_root_cause: Misconfigured rate limit at api-gateway
+    expected_signal_type: metric_spike
+
+  - fault_id: inventory-high-db-latency
+    description: Severe MongoDB latency on inventory reads and writes
+    injected_service: inventory-service
+    true_root_cause: MongoDB connection pool exhaustion in inventory-service
+    expected_signal_type: metric_spike
+
+  - fault_id: external-payment-intermittent-reject
+    description: Provider rejects charges (same as reject but catalogued separately for eval)
+    injected_service: external-payment-mock
+    true_root_cause: External payment provider policy change rejecting valid charges
+    expected_signal_type: log_pattern
+
+  - fault_id: orders-slow-processing
+    description: Orders-service slow path under load
+    injected_service: orders-service
+    true_root_cause: Gradual latency degradation in orders-service after deploy
+    expected_signal_type: metric_spike
+
+  - fault_id: payments-timeout-cascade
+    description: Provider timeout long enough to fail orders-service HTTP client
+    injected_service: external-payment-mock
+    true_root_cause: External payment provider outage causing upstream timeouts
+    expected_signal_type: log_pattern
+
+  - fault_id: gateway-rate-limit-moderate
+    description: Moderate gateway rate limit for mixed traffic scenarios
+    injected_service: api-gateway
+    true_root_cause: Misconfigured rate limit at api-gateway
+    expected_signal_type: metric_spike
+
+  - fault_id: inventory-db-latency-mild
+    description: Mild inventory DB slowdown
+    injected_service: inventory-service
+    true_root_cause: MongoDB replica set lag affecting inventory-service
+    expected_signal_type: metric_spike
+
+  - fault_id: payment-null-deref-eval
+    description: Eval variant of payments null-deref for harness repeatability
+    injected_service: payments-service
+    true_root_cause: Bad deploy to payments-service introduced null deref in charge handler
+    expected_signal_type: log_pattern
+
+  - fault_id: provider-timeout-eval
+    description: Eval variant of provider timeout with default 8s delay
+    injected_service: external-payment-mock
+    true_root_cause: External payment provider outage causing upstream timeouts
+    expected_signal_type: log_pattern
+
+  - fault_id: inventory-pool-stress-heavy
+    description: Heavy connection pool stress on inventory MongoDB
+    injected_service: inventory-service
+    true_root_cause: MongoDB connection pool exhaustion in inventory-service
+    expected_signal_type: metric_spike
+
+  - fault_id: orders-delay-heavy
+    description: Heavy processing delay simulating memory pressure
+    injected_service: orders-service
+    true_root_cause: Memory leak simulation causing gradual latency degradation in orders-service
+    expected_signal_type: metric_spike
